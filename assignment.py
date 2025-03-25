@@ -14,20 +14,19 @@ class Climatechangeanalysis:
         src = rasterio.open(precip_for_climate)
         self.precipitation_data = src.read(1) 
         
-    '''def info_climatechange(self):
-        #This function
-        # Extract available years from the dataset
+    def info_climatechange(self):
+        #This function Extract available years from the dataset
         available_years = [int(col) for col in self.temperature_data.columns[2:] if str(col).isdigit()]
 
         # Define groups dynamically
         groups = {"Before 2011": [year for year in available_years if year < 2011]}
 
-        # Create decade groups
+        #Create decade groups
         for year in range(2011, max(available_years) + 1, 10):
             decade_label = f"{year}-{min(year+9, max(available_years))}"
             groups[decade_label] = [y for y in available_years if year <= y < year + 10]
 
-        # Compute averages
+        #Compute averages
         grouped_avg = pd.DataFrame()
         grouped_avg["District"] = self.temperature_data["District Name"]
         grouped_avg["Before 2011"] = self.temperature_data["2011"]
@@ -36,14 +35,14 @@ class Climatechangeanalysis:
             year_cols = [str(year) for year in years]
             grouped_avg[group] = self.temperature_data[year_cols].mean(axis=1)
 
-        # Merge with geographic data
+        #Merge with geographic data
         merged_data = self.administrative_boundaries.merge(grouped_avg, left_on='DISTRICT', right_on='District', how='left')
 
-        # Create subplots
+        #Create subplots
         fig, axes = plt.subplots(5, 2, figsize=(15, 25))
         axes = axes.flatten()  # Flatten the 5x2 array to 1D for easier iteration
 
-        # Plot each time period in a separate subplot
+        #Plot each time period in a separate subplot
         for i, (group_name, _) in enumerate(groups.items()):
             if i >= len(axes):  # Ensure we don't exceed subplot count
                 break
@@ -61,7 +60,7 @@ class Climatechangeanalysis:
         plt.imshow(self.precipitation_data, cmap = 'cool')
         plt.colorbar(label = 'Precipitation Index')
         plt.title('Climate analysis of Nepal')
-        plt.show()'''
+        plt.show()
 
     def EDA_analysis(self):
         selected_districts = ["BANKE", "KATHMANDU", "KASKI", "MUSTANG"]
@@ -121,5 +120,5 @@ climatedata = Climatechangeanalysis(
     'nepal_climate_data/data/Local Unit/local_unit.shp',
     'nepal_climate_data/nepal_precipitation_2020.tif'
 )
-#climatedata.info_climatechange()
+climatedata.info_climatechange()
 climatedata.EDA_analysis()
